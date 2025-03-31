@@ -6,14 +6,22 @@
 
 namespace CMac {
 
+template <typename T> struct Vector2 {
+  T x;
+  T y;
+};
+
 class Window {
 public:
-  Window(int width, int height);
+  Window(int width, int height, const char *title);
   ~Window();
 
   void clear() const;
-  inline void display() const { SDL_RenderPresent(m_renderer); }
+  Vector2<int> get_size() const;
   bool should_close();
+
+  inline void display() const { SDL_RenderPresent(m_renderer); }
+  inline SDL_Renderer *get_renderer() { return m_renderer; }
 
 private:
   SDL_Window *m_window;

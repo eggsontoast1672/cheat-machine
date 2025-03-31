@@ -1,10 +1,12 @@
 #include "cmac/window.hpp"
 
+#include <SDL2/SDL_video.h>
 #include <iostream>
 #include <sstream>
 #include <stdexcept>
 
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_stdinc.h>
 
 [[noreturn]]
 static void panic(const char *message) {
@@ -15,14 +17,24 @@ static void panic(const char *message) {
 
 namespace CMac {
 
-Window::Window(int width, int height) {
+Window::Window(int width, int height, const char *title) {
   if (SDL_Init(SDL_INIT_VIDEO) < 0) {
     panic("failed to initialize SDL");
   }
-  if (SDL_CreateWindowAndRenderer(width, height, SDL_WINDOW_SHOWN, &m_window,
-                                  &m_renderer) < 0) {
+
+  constexpr Uint32 flags = SDL_WINDOW_RESIZABLE;
+  m_window = SDL_CreateWindow(title, SDL_WINDOWPOS_UNDEFINED,
+                              SDL_WINDOWPOS_UNDEFINED, width, height, flags);
+  if (m_window == nullptr) {
     SDL_Quit();
-    panic("failed to create window and renderer");
+    panic("failed to create window");
+  }
+
+  m_renderer = SDL_CreateRenderer(m_window, -1, 0);
+  if (m_renderer == nullptr) {
+    SDL_DestroyWindow(m_window);
+    SDL_Quit();
+    panic("failed to create renderer");
   }
 }
 
@@ -36,6 +48,12 @@ void Window::clear() const {
   if (SDL_RenderClear(m_renderer) < 0) {
     std::cerr << SDL_GetError() << '\n';
   }
+}
+
+Vector2<int> Window::get_size() const {
+  Vector2<int> size;
+  SDL_GetWindowSize(m_window, &size.x, &size.y);
+  return size;
 }
 
 bool Window::should_close() {

@@ -1,7 +1,3 @@
-# Output files
-*.o
-/cmac
-
 # IDE files
 .cache
-compile_commands.json
+/build
