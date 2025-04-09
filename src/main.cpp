@@ -1,5 +1,7 @@
 #include "cmac/window.hpp"
 
+#include <cstddef>
+
 void draw_board(CMac::Window &window) {
   const SDL_Color light = {0xff, 0xff, 0xff, 0xff};
   const SDL_Color dark = {0xff, 0x00, 0x00, 0xff};
@@ -14,7 +16,7 @@ void draw_board(CMac::Window &window) {
       SDL_FRect rect = {x * square_width, y * square_height, square_width,
                         square_height};
       SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
-      SDL_RenderFillRectF(renderer, &rect);
+      SDL_RenderFillRect(renderer, &rect);
     }
   }
 }

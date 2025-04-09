@@ -8,28 +8,30 @@ Piece Piece::from_char(char c) {
   switch (c) {
   case 'b':
     return Piece{PieceColor::Black, PieceKind::Bishop};
-  case 'b':
-    return Piece{PieceColor::Black, PieceKind::Bishop};
-  case 'b':
-    return Piece{PieceColor::Black, PieceKind::Bishop};
-  case 'b':
-    return Piece{PieceColor::Black, PieceKind::Bishop};
-  case 'b':
-    return Piece{PieceColor::Black, PieceKind::Bishop};
-  case 'b':
-    return Piece{PieceColor::Black, PieceKind::Bishop};
-  case 'b':
-    return Piece{PieceColor::Black, PieceKind::Bishop};
-  case 'b':
-    return Piece{PieceColor::Black, PieceKind::Bishop};
-  case 'b':
-    return Piece{PieceColor::Black, PieceKind::Bishop};
-  case 'b':
-    return Piece{PieceColor::Black, PieceKind::Bishop};
-  case 'b':
-    return Piece{PieceColor::Black, PieceKind::Bishop};
-  case 'b':
-    return Piece{PieceColor::Black, PieceKind::Bishop};
+  case 'k':
+    return Piece{PieceColor::Black, PieceKind::King};
+  case 'n':
+    return Piece{PieceColor::Black, PieceKind::Knight};
+  case 'p':
+    return Piece{PieceColor::Black, PieceKind::Pawn};
+  case 'q':
+    return Piece{PieceColor::Black, PieceKind::Queen};
+  case 'r':
+    return Piece{PieceColor::Black, PieceKind::Rook};
+  case 'B':
+    return Piece{PieceColor::White, PieceKind::Bishop};
+  case 'K':
+    return Piece{PieceColor::White, PieceKind::King};
+  case 'N':
+    return Piece{PieceColor::White, PieceKind::Knight};
+  case 'P':
+    return Piece{PieceColor::White, PieceKind::Pawn};
+  case 'Q':
+    return Piece{PieceColor::White, PieceKind::Queen};
+  case 'R':
+    return Piece{PieceColor::White, PieceKind::Rook};
+  default:
+    throw std::runtime_error{"Piece::from_char: invalid character"};
   }
 }
 
