@@ -2,7 +2,7 @@
 
 #include <sstream>
 
-namespace CMac {
+namespace cmac {
 
 Piece Piece::from_char(char c) {
   switch (c) {
@@ -50,4 +50,4 @@ Board::Board(const std::string &fen) {
   }
 }
 
-} // namespace CMac
+} // namespace cmac

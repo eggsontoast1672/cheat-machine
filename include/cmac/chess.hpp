@@ -5,7 +5,7 @@
 #include <optional>
 #include <string>
 
-namespace CMac {
+namespace cmac {
 
 enum class PieceColor { Black, White };
 enum class PieceKind { Bishop, King, Knight, Pawn, Queen, Rook };
@@ -39,4 +39,4 @@ private:
   std::uint8_t m_fullmove_counter;
 };
 
-} // namespace CMac
+} // namespace cmac

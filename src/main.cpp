@@ -1,32 +1,49 @@
-#include "cmac/window.hpp"
-
 #include <cstddef>
 
-void draw_board(CMac::Window &window) {
-  const SDL_Color light = {0xff, 0xff, 0xff, 0xff};
-  const SDL_Color dark = {0xff, 0x00, 0x00, 0xff};
-  const CMac::Vector2<int> window_size = window.get_size();
-  const float square_width = window_size.x / 8.0f;
-  const float square_height = window_size.y / 8.0f;
+#include <SFML/Graphics.hpp>
 
-  SDL_Renderer *renderer = window.get_renderer();
+const sf::Color light{0xff, 0xff, 0xff};
+const sf::Color dark{0xff, 0x00, 0x00};
+
+sf::Vector2f get_square_size(const sf::RenderWindow &window) {
+  sf::Vector2u window_size = window.getSize();
+  return sf::Vector2f{
+      window_size.x / 8.0f,
+      window_size.y / 8.0f,
+  };
+}
+
+void draw_board(sf::RenderWindow &window) {
+  sf::Vector2f square_size = get_square_size(window);
+  sf::RectangleShape rect{square_size};
+
   for (std::size_t y = 0; y < 8; y++) {
     for (std::size_t x = 0; x < 8; x++) {
-      SDL_Color color = (x + y) % 2 == 0 ? light : dark;
-      SDL_FRect rect = {x * square_width, y * square_height, square_width,
-                        square_height};
-      SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
-      SDL_RenderFillRect(renderer, &rect);
+      if ((x + y) % 2 == 0) {
+        rect.setFillColor(light);
+      } else {
+        rect.setFillColor(dark);
+      }
+
+      sf::Transform transform;
+      transform.translate(x * square_size.x, y * square_size.y);
+      window.draw(rect, sf::RenderStates{transform});
     }
   }
 }
 
 int main() {
-  static constexpr int g_screen_size = 600;
+  sf::RenderWindow window{sf::VideoMode{600, 600}, "Cheat Machine"};
+  window.setFramerateLimit(60);
 
-  CMac::Window window{g_screen_size, g_screen_size, "Cheat Machine"};
+  while (window.isOpen()) {
+    sf::Event event;
+    while (window.pollEvent(event)) {
+      if (event.type == sf::Event::Closed) {
+        window.close();
+      }
+    }
 
-  while (!window.should_close()) {
     window.clear();
     draw_board(window);
     window.display();
