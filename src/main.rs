@@ -1,41 +1,33 @@
-use raylib::prelude::*;
+#![deny(missing_docs)]
 
-const SCREEN_WIDTH: i32 = 800;
-const SCREEN_HEIGHT: i32 = 600;
-const CELL_WIDTH: f32 = SCREEN_WIDTH as f32 / 8.0;
-const CELL_HEIGHT: f32 = SCREEN_HEIGHT as f32 / 8.0;
+//! This program is a tool to help win chess games against bots. The idea is
+//! that you run this program while playing a bot game to figure out what moves
+//! to play. If your bot opponent is worse at chess than Stockfish (likely),
+//! then you will win the game! It's very fun.
 
-fn draw_board(d: &mut RaylibDrawHandle) {
-    for y in 0..8 {
-        for x in 0..8 {
-            let color = if (x + y) % 2 == 0 {
-                Color::RED
-            } else {
-                Color::BLUE
-            };
+use assets::AssetCache;
+use macroquad::prelude::*;
 
-            d.draw_rectangle_rec(
-                Rectangle {
-                    x: x as f32 * CELL_WIDTH,
-                    y: y as f32 * CELL_HEIGHT,
-                    width: CELL_WIDTH,
-                    height: CELL_HEIGHT,
-                },
-                color,
-            );
-        }
+mod assets;
+mod draw;
+
+fn window_conf() -> Conf {
+    Conf {
+        window_title: String::from("Cheat Machine"),
+        window_width: 800,
+        window_height: 800,
+        sample_count: 4,
+        ..Default::default()
     }
 }
 
-fn main() {
-    let (mut rl, thread) = raylib::init()
-        .size(SCREEN_WIDTH, SCREEN_HEIGHT)
-        .title("Cheat Machine")
-        .build();
+#[macroquad::main(window_conf)]
+async fn main() {
+    let mut cache = AssetCache::new();
+    let b = chess::Board::default();
 
-    while !rl.window_should_close() {
-        let mut d = rl.begin_drawing(&thread);
-        d.clear_background(Color::BLACK);
-        draw_board(&mut d);
+    loop {
+        draw::board(&b, &mut cache).await;
+        next_frame().await;
     }
 }
